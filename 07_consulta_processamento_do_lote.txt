@@ -1,0 +1,18 @@
+
+Private Sub btnConsultaProc_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnConsultaProc.Click
+
+            Cursor = Cursors.AppStarting
+
+            lblStatus.Text = "Aguarde..."
+
+            btnConsultaProc.Enabled = False
+
+            txtConsProces.Text = New nfecsharp().NfeRetRecepcao(textBox1.Text)
+
+            btnConsultaProc.Enabled = True
+
+            lblStatus.Text = "Concluído."
+
+            Cursor = Cursors.Default
+
+        End Sub

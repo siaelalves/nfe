@@ -1,0 +1,44 @@
+
+Private Sub btnImprime_Click(ByVal sender As Object, ByVal e As EventArgs) Handles button1.Click
+
+            openFileDialog1.InitialDirectory = (Application.StartupPath & "\nfe\arquivos\assinado")
+
+            openFileDialog1.Filter = "NF-e (*.xml)|"
+
+            openFileDialog1.Title = "Localizar NF-e"
+
+            Dim nfecsharp As New nfecsharp
+
+            If (openFileDialog1.ShowDialog = DialogResult.OK) Then
+
+                lblStatus.Text = "Imprimindo DANFE, aguarde..."
+
+                Dim tipoImp As Integer = 0
+
+                If radioButton1.Checked Then
+
+                    tipoImp = 1
+
+                ElseIf radioButton2.Checked Then
+
+                    tipoImp = 2
+
+                Else
+
+                    tipoImp = 3
+
+                End If
+
+                Dim i As Integer
+
+                For i = 0 To Convert.ToInt32(txtQtdImpr.Text) - 1
+
+                    nfecsharp.NFeDanfe(openFileDialog1.FileName, txtPathPDF.Text, tipoImp, chkDanfeSeg.Checked)
+
+                Next i
+
+                lblStatus.Text = "Concluído."
+
+            End If
+
+        End Sub

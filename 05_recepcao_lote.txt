@@ -1,0 +1,28 @@
+
+Private Sub btnRecepcao_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRecepcao.Click
+
+            Cursor = Cursors.AppStarting
+
+            lblStatus.Text = "Aguarde..."
+
+            btnRecepcao.Enabled = False
+
+            openFileDialog1.InitialDirectory = (Application.StartupPath & "\nfe\lotes")
+
+            openFileDialog1.Filter = "Arquivo de Lotes (*env-lot.xmll)|"
+
+            openFileDialog1.Title = "Transmitir NF-e"
+
+            If (openFileDialog1.ShowDialog = DialogResult.OK) Then
+
+                txtRecepcao.Text = New nfecsharp().NfeRecepcao(openFileDialog1.FileName)
+
+            End If
+
+            btnRecepcao.Enabled = True
+
+            lblStatus.Text = "Concluído."
+
+            Cursor = Cursors.Default
+
+        End Sub

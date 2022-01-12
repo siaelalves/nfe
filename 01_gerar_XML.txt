@@ -1,0 +1,668 @@
+
+Private Sub btnGerarNFe_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnGerarNFe.Click
+
+            btnGerarNFe.Enabled = False
+
+            Cursor = Cursors.AppStarting
+
+
+
+            Dim ide As String() = New String(25) {}
+
+            Dim emit As String() = New String(15) {}
+
+            Dim dest As String() = New String(37) {}
+
+            Dim detProd As String(,) = New String(Convert.ToInt32(txtQtdItens.Text) - 1, 92) {}
+
+            Dim total As String() = New String(26) {}
+
+            Dim transp As String() = New String(22) {}
+
+            Dim cobr As String() = New String(6) {}
+
+            Dim infAdic As String() = New String(2) {}
+
+            Dim random As New Random(6)
+
+
+
+            'gerar numero nNF aleatório 
+
+            Dim num As Integer = (random.Next(6) + DateTime.Now.Millisecond)
+
+
+
+            '<ide> TAG de grupo das informações de identificação da NF-e
+
+            ide(0) = "35"                                       '<cUF>
+
+            ide(1) = "00000099"                                 '<cNF> 8 DIGITOS A PARTIR DA VERSAO 2.0 (MANUAL 4.01)
+
+            ide(2) = "VENDA DE PROD. ESTAB"                     '<natOp>
+
+            ide(3) = "0"                                        '<indPag>
+
+            ide(4) = "55"                                       '<mod>
+
+            ide(5) = "1"                                        '<serie>
+
+            ide(6) = num.ToString                               '<nNF>
+
+            ide(7) = DateTime.Today.ToString("yyyy-MM-dd")      '<dEmi>
+
+            ide(8) = DateTime.Today.ToString("yyyy-MM-dd")      '<dSaiEnt>
+
+            ide(9) = "1"                                        '<tpNF>
+
+            ide(10) = txtCodMun.Text                            '<cMunFG>
+
+            ide(11) = "1"                                       '<tpEmis>
+
+            ide(12) = "1"                                       '<finNFe>
+
+            ide(13) = ""                                        'NFref: <refNFe> 'nf-e relacionadas'
+
+            ide(14) = "18:01:01"                                '<hSaiEnt> Formato “HH:MM:SS” (v.2.0)
+
+
+
+            ' Grupo de informação das NF-e e cupom referenciado - tag NFref 
+
+            ide(13) = ""            'NFref: refNFe ou refECF.nCOO
+
+            ide(17) = ""            'NFref: refECF mod
+
+            ide(18) = ""            'NFref: refECF nECF
+
+
+
+            ' Grupo de informação da NF modelo 1/1A referenciada 
+
+            ide(19) = ""            'cUF    --> Utilizar a Tabela do IBGE
+
+            ide(20) = ""            'AAMM   --> AAMM da emissão da NF
+
+            ide(21) = ""            'CNPJ   --> CNPJ do emitente da NF
+
+            ide(22) = ""            'mod    --> Informar o código do modelo do Documento fiscal: 01 – modelo 01
+
+            ide(23) = ""            'serie  --> nformar a série do documento fiscal
+
+            ide(24) = ""            'nNF    --> 1 – 999999999            
+
+
+
+            ' Contingencia 
+
+            ide(15) = ""            'dhCont (ex: 2010-08-27T08:55:33) v6.03 
+
+            ide(16) = ""            'xJust v6.03
+
+
+
+            '<emit>TAG de grupo de identificação do emitente da NF-e
+
+            emit(0) = "EMPRESA EMITENTE ENGARRAFAMENTOS"        '<xNome>
+
+            emit(1) = "ENGARRAFAMENTOS"                         '<xFant>
+
+            emit(2) = "ROD. ANEL RODOVIARIO KM153"              '<xLgr>
+
+            emit(3) = "236"                                     '<nro>
+
+            emit(4) = "FAB FIAT"                                '<xCpl>
+
+            emit(5) = "BELO HORIZONTE"                          '<xBairro>
+
+            emit(6) = txtCodMun.Text                            '<cMun>
+
+            emit(7) = txtMun.Text                               '<xMun>
+
+            emit(8) = "31310295"                                '<CEP>
+
+            emit(9) = "7133711818"                              '<fone>
+
+            emit(10) = txtIE.Text                               '<IE>
+
+            emit(11) = "07440600133"                            '<IM>
+
+            emit(12) = "6201500"                                '<CNAE>
+
+            emit(13) = ""                                       '<IEST>
+
+            emit(14) = "1"                                      '<CRT> 1 – Simples Nacional 2 – Simples Nacional – excesso de sublimite de receita bruta; 3 – Regime Normal
+
+
+
+            '<dest> TAG de grupo de identificação do Destinatário da NF-e
+
+            dest(0) = "34261131000144"                      '<CNPJ> ou <CPF>
+
+            dest(1) = "Empresa de Destino Teste"            '<xNome>
+
+            dest(2) = "Rua Padre Casemiro Quiroga"          '<xLgr>
+
+            dest(3) = "236"                                 '<nro>          
+
+            dest(4) = "Complemento"                         '<xCpl>
+
+            dest(5) = "Bairro Teste"                        '<xBairro>
+
+            dest(6) = "2927408"                             '<cMun>
+
+            dest(7) = "Salvador"                            '<xMun>
+
+            dest(8) = "BA"                                  '<UF>
+
+            dest(9) = "41720400"                            '<CEP>
+
+            dest(10) = "1058"                               '<cPais>
+
+            dest(11) = "BRASIL"                             '<xPais>
+
+            dest(12) = "7133711818"                         '<fone>
+
+            dest(13) = "26858614"                           '<IE>
+
+            dest(14) = ""                                   '<ISUF>
+
+
+
+            'Grupo de Exportação v6.01
+
+            dest(15) = "SP"                               'UFEmbarq
+
+            dest(16) = "11"                               'xLocEmbarq
+
+
+
+            'Grupo de Compra v6.01
+
+            dest(17) = "SP"                               'xNEmp
+
+            dest(18) = "SP"                               'xPed
+
+            dest(19) = "SP"                               'xCont
+
+
+
+            dest(20) = ""                                 'email
+
+
+
+            ' Grupo de identificação do Local de RETIRADA 
+
+            ' Informar apenas quando for diferente do endereço do remetente. 
+
+
+
+            dest(21) = ""                               'RETIRADA <CNPJ> ou <CPF>
+
+            dest(22) = ""                               'RETIRADA <xLgr>
+
+            dest(23) = ""                               'RETIRADA <nro>
+
+            dest(24) = ""                               'RETIRADA <xCpl>
+
+            dest(25) = ""                               'RETIRADA <xBairro>
+
+            dest(26) = ""                               'RETIRADA <cMun>
+
+            dest(27) = ""                               'RETIRADA <xMun>
+
+            dest(28) = ""                               'RETIRADA <UF>
+
+
+
+            ' Grupo de identificação do Local de ENTREGA 
+
+            ' Informar apenas quando for diferente do endereço do remetente. 
+
+
+
+            dest(29) = ""                               'ENTREGA <CNPJ> ou <CPF>
+
+            dest(30) = ""                               'ENTREGA <xLgr>
+
+            dest(31) = ""                               'ENTREGA <nro>
+
+            dest(32) = ""                               'ENTREGA <xCpl>
+
+            dest(33) = ""                               'ENTREGA <xBairro>
+
+            dest(34) = ""                               'ENTREGA <cMun>
+
+            dest(35) = ""                               'ENTREGA <xMun>
+
+            dest(36) = ""                               'ENTREGA <UF>
+
+
+
+            Dim i As Integer
+
+
+
+            '<prod> TAG de grupo do detalhamento de Produtos e Serviços da NF-e
+
+            For i = 0 To detProd.GetLength(0) - 1
+
+                detProd(i, 0) = "55"                                            '<cProd>
+
+                detProd(i, 1) = "7893000980006"                                 '<cEAN>
+
+                detProd(i, 2) = ("MEU PRODUTO DE TESTE " & (i + 1) & " NFe")    '<xProd>
+
+                detProd(i, 3) = "73181500"                                      '<NCM>
+
+                detProd(i, 4) = ""                                              '<EXTIPI> Antes da vr 2.00, esta posicao era o GENERO.
+
+                detProd(i, 5) = "6152"                                          '<CFOP>
+
+                detProd(i, 6) = "Kg"                                            '<uCom>
+
+                detProd(i, 7) = "1.0000"                                        '<qCom>
+
+                detProd(i, 8) = "10.0000"                                       '<vUnCom>
+
+                detProd(i, 9) = "10.00"                                         '<vProd>
+
+                detProd(i, 10) = "7893000980006"                                'eantrib <cEANTrib>
+
+                detProd(i, 11) = "Kg"                                           '<uTrib>
+
+                detProd(i, 12) = "1.1"                                          '<qTrib>
+
+                detProd(i, 13) = "10.0000"                                      '<vUnTrib>
+
+                detProd(i, 14) = "1.00"                                         '<vFrete>
+
+                detProd(i, 15) = "1.00"                                         '<vSeg>
+
+                detProd(i, 16) = "1.00"                                       '<vDesc>
+
+
+
+                ' tag ISSQN
+
+                detProd(i, 39) = ""                         'ISSQN <vBC>
+
+                detProd(i, 40) = ""                         'ISSQN <vAliq>
+
+                detProd(i, 41) = ""                         'ISSQN <vISSQN>
+
+                detProd(i, 42) = ""                         'ISSQN <cMunFG>
+
+                detProd(i, 43) = ""                         'ISSQN <cListServ>
+
+                detProd(i, 70) = ""                         'ISSQN <cSitTrib>               //NF-e 2.00
+
+
+
+                'tag ICMS
+
+                detProd(i, 17) = "0"                                        '<orig>
+
+                detProd(i, 18) = txtCstIcms.Text                         '<CST>
+
+                detProd(i, 19) = "3"                                        '<modBC>
+
+                detProd(i, 20) = "10.00"                                    '<vBC>
+
+                detProd(i, 21) = "17.00"                                    '<pICMS>
+
+                detProd(i, 22) = "1.70"                                     '<vICMS>
+
+
+
+                detProd(i, 46) = "0"                    '<modBCST>      
+
+                detProd(i, 47) = ""                     '<pMVAST>       
+
+                detProd(i, 48) = ""                     '<pRedBCST>     
+
+
+
+                detProd(i, 49) = "0"                    '<vBCSTRet>         //foi modificado, antes vBCST; v6.01 = vBCSTRet
+
+                detProd(i, 50) = "0"                    '<vICMSSTRet>       //foi modificado, antes vICMSST; v6.01 = vICMSSTRet
+
+
+
+                detProd(i, 51) = "0"                    '<vICMSST>          { campo novo }
+
+                detProd(i, 52) = "0"                    '<pRedBC>           { campo novo }
+
+
+
+                detProd(i, 80) = "0"                    '<pCredSN>          
+
+                detProd(i, 81) = "0"                    '<vCredICMSSN>      
+
+
+
+                detProd(i, 85) = ""                     '<motDesICMS> Informar o motivo da desoneração: 0 a 9, ver tabela no manual do contribuinte NF-e.       
+
+
+
+                ' tag IPI 
+
+
+
+                detProd(i, 23) = txtCstIpi.Text                'IPI <CST>
+
+
+
+                ' obs: Informar os campos INDEX 24 e 25 caso o cálculo do IPI seja por alíquota ou os campos INDEX
+
+                ' 78 e 79 caso o cálculo do IPI seja valor por unidade. 
+
+                detProd(i, 78) = String.Empty                    'IPI qUnid v6.03
+
+                detProd(i, 79) = String.Empty                    'IPI vUnid v6.03
+
+                detProd(i, 24) = "0.05"                          'IPI <vBC>
+
+                detProd(i, 25) = "0.05"                          'IPI <pIPI>
+
+                ' fim obs 
+
+
+
+                detProd(i, 87) = "0"                             'IPI <clEnq>
+
+                detProd(i, 88) = "00000000000000"                'IPI <CNPJProd>
+
+                detProd(i, 89) = "0"                             'IPI <cSelo>
+
+                detProd(i, 90) = "0"                             'IPI <qSelo>
+
+                detProd(i, 91) = "0"                             'IPI <cEnq>
+
+
+
+                detProd(i, 26) = "5"                             'IPI <vIPI>
+
+
+
+                'tag II
+
+                detProd(i, 27) = "0"            'II <vBC>
+
+                detProd(i, 28) = "0"            'II <vDespAdu>
+
+                detProd(i, 29) = "0"            'II <vII>
+
+                detProd(i, 30) = "0"            'II <vIOF>
+
+
+
+                'tag PIS
+
+                detProd(i, 31) = txtPis.Text      '<CST>
+
+                detProd(i, 32) = "10.00"             '<vBC>
+
+                detProd(i, 33) = "1.00"              '<pPIS>
+
+                detProd(i, 34) = "0.10"              '<vPis>
+
+                detProd(i, 45) = "0.1"               '<vAliqProd>     { campo novo }
+
+
+
+                'tag COFINS
+
+                detProd(i, 35) = txtCofins.Text      '<CST>
+
+                detProd(i, 36) = "10.00"                '<vBC>
+
+                detProd(i, 37) = "3.00"                 '<pCOFINS>
+
+                detProd(i, 38) = "0.30"                 '<vCOFINS>
+
+                detProd(i, 44) = "0.3"                  '<vAliqProd>     { campo novo }
+
+
+
+                'tag PISST
+
+                detProd(i, 54) = ""              'vBC
+
+                detProd(i, 55) = ""              'pPIS
+
+                detProd(i, 56) = ""              'vPIS
+
+
+
+                'tag COFINSST   
+
+                detProd(i, 57) = "4"              'vBC
+
+                detProd(i, 58) = "5"              'pCOFINS
+
+                detProd(i, 59) = "6"              'vCOFINS
+
+
+
+                'Tag da Declaração de Importação | DI 
+
+                detProd(i, 60) = ""                             'nDI
+
+                detProd(i, 61) = ""                             'dDI
+
+                detProd(i, 62) = ""                             'xLocDesemb
+
+                detProd(i, 63) = ""                             'UFDesemb
+
+                detProd(i, 64) = ""                             'dDesemb
+
+                detProd(i, 65) = ""                             'cExportador
+
+                detProd(i, 66) = ""                             'adi: nAdicao
+
+                detProd(i, 67) = ""                             'adi: nSeqAdic
+
+                detProd(i, 68) = ""                             'adi: cFabricante
+
+                detProd(i, 69) = ""                             'adi: vDescDI
+
+
+
+                detProd(i, 53) = "INF. ADICIONAL PRODUTO"       'infAdProd
+
+
+
+                'Grupo do detalhamento de Medicamentos e de matériasprimas farmacêuticas
+
+                detProd(i, 71) = String.Empty '"12345671234564654";            //nLote
+
+                detProd(i, 72) = String.Empty '"123.123";                      //qLote
+
+                detProd(i, 73) = String.Empty '"2010-01-01";                   //dFab
+
+                detProd(i, 74) = String.Empty '"2011-01-01";                   //dVal
+
+                detProd(i, 75) = String.Empty '"222.123";                      //vPMC
+
+
+
+                detProd(i, 76) = "1"          'indTot v6.03 --> Indica se valor do Item (vProd) entra no valor total da NF-e (vProd)
+
+
+
+                detProd(i, 83) = "222"                             'xPed
+
+                detProd(i, 84) = "333"                             'nItemPed
+
+
+
+            Next i
+
+
+
+            '<total> TAG de grupo de Valores Totais da NF-e 
+
+            total(0) = "50.00"              'ICMSTot <vBC>
+
+            total(1) = "8.50"               'ICMSTot <vICMS>
+
+            total(2) = "0.00"               'ICMSTot <vBCST>
+
+            total(3) = "0.00"               'ICMSTot <vST>
+
+            total(4) = "50.00"              'ICMSTot <vProd>
+
+            total(5) = "5.00"               'ICMSTot <vFrete>
+
+            total(6) = "7.10"               'ICMSTot <vSeg>
+
+            total(7) = "8.10"               'ICMSTot <vDesc>
+
+            total(8) = "0.00"               'ICMSTot <vII>
+
+            total(9) = "0.00"               'ICMSTot <vIPI>
+
+            total(10) = "15.0"              'ICMSTot <vPIS>
+
+            total(11) = "30.00"             'ICMSTot <vCOFINS
+
+            total(12) = "0.00"              'ICMSTot <vOutro>
+
+            total(13) = "50.00"             'ICMSTot <vNF>
+
+
+
+            total(14) = ""                  'ISSQNtot <vServ>
+
+            total(15) = ""                  'ISSQNtot <vBC>
+
+            total(16) = ""                  'ISSQNtot <vISS>
+
+            total(17) = ""                  'ISSQNtot <vPIS>
+
+            total(18) = ""                  'ISSQNtot <vCOFINS>
+
+
+
+            ' retTrib: Grupo de Retenções de Tributos 
+
+            total(19) = ""                 'vRetPIS
+
+            total(20) = ""                 'vRetCOFINS
+
+            total(21) = ""                 'vRetCSLL
+
+            total(22) = ""                 'vBCIRRF
+
+            total(23) = ""                 'vIRRF
+
+            total(24) = ""                 'vBCRetPrev
+
+            total(25) = ""                 'vRetPrev
+
+
+
+            '<transp> Informações do Transporte da NF-e
+
+            transp(0) = "0"                             '<modFrete>
+
+            transp(1) = "34261131000144"                '<CNPJ> ou <CPF>
+
+            transp(2) = "Teste Transp Jack"             '<xNome>
+
+            transp(3) = "7012578100048"                 '<IE>
+
+            transp(4) = "Teste End. Transp. Jack"       '<xEnder>
+
+            transp(5) = "Belo Horizonte"                '<xMun>
+
+            transp(6) = "MG"                            '<UF>
+
+
+
+            transp(7) = "XOX2255"                       '<placa>
+
+            transp(8) = "MG"                            '<UF>
+
+
+
+            'Grupo de Volumes
+
+            transp(9) = "5"                             '<qVol>
+
+            transp(10) = "VOLUME"                       '<esp>
+
+            transp(11) = "JACK"                         '<marca>
+
+            transp(12) = "99"                           '<nVol>
+
+            transp(13) = "11.535"                       '<pesoL>
+
+            transp(14) = "15.282"                       '<pesoB>
+
+            'obs: Separe por ; para informar diversos volumes   
+
+
+
+            transp(15) = ""                             'RNTC/ANTT
+
+
+
+            ' retTransp: Grupo de Retenção do ICMS do transporte 
+
+            transp(16) = ""                            'vServ
+
+            transp(17) = ""                            'vBCRet
+
+            transp(18) = ""                            'pICMSRet
+
+            transp(19) = ""                            'vICMSRet
+
+            transp(20) = ""                            'CFOP
+
+            transp(21) = ""                            'cMunFG
+
+
+
+            '<cobr> Dados da Cobrança
+
+            cobr(0) = "22"                          'fat <nFat>
+
+            cobr(1) = "50"                          'fat <vOrig>
+
+            cobr(2) = "453.28"                      'fat <vLiq>
+
+
+
+            ' neste ex, existem 2 parcelas
+
+            cobr(3) = "01;02;"                      'dup <nDup>
+
+            cobr(4) = "2008-05-30;2008-06-30;"      'dup <dVenc>
+
+            cobr(5) = "226.64;226.64;"              'dup <vDup>
+
+
+
+            '<infAdic> Informações Adicionais da NF-e
+
+            infAdic(0) = "Informacoes Adicionais de Interesse do Fisco - Informacoes Adicionais de Interesse do Fisco - Informacoes Adicionais de Interesse do Fisco - Informacoes Adicionais de Interesse do Fisco"        'infAdFisco
+
+            infAdic(1) = "Informacoes Complementares de interesse do Contribuinte" 'infCpl
+
+
+
+            'chamar função para gerar a nf-e
+
+            Dim str As String = New nfecsharp().GeraNFe(ide, emit, dest, detProd, total, transp, cobr, infAdic, ckbAssinar.Checked)
+
+
+
+            lblStatus.Text = str
+
+            btnGerarNFe.Enabled = True
+
+            Cursor = Cursors.Default
+
+        End Sub

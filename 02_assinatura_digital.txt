@@ -1,0 +1,19 @@
+Private Sub btnAssinar_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAssinar.Click
+
+            openFileDialog1.InitialDirectory = (Application.StartupPath & "\nfe\arquivos")
+
+            openFileDialog1.Filter = "NF-e (*.xml)|"
+
+            openFileDialog1.Title = "Assinar NF-e"
+
+            If (openFileDialog1.ShowDialog = DialogResult.OK) Then
+
+                lblStatus.Text = "Assinando arquivo, aguarde..."
+
+                lblStatus.Refresh()
+
+                lblStatus.Text = New nfecsharp().AssinarArquivoXML(openFileDialog1.FileName, "infNFe")
+
+            End If
+
+        End Sub

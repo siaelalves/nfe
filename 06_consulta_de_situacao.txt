@@ -1,0 +1,26 @@
+
+Private Sub btnConsultaSituacao_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnConsultaSituacao.Click
+
+            If (txtNfeSit.Text = String.Empty) Then
+
+                MessageBox.Show("Informe uma NF-e.")
+
+            Else
+
+                Cursor = Cursors.AppStarting
+
+                lblStatus.Text = "Aguarde..."
+
+                btnConsultaSituacao.Enabled = False
+
+                txtConsultaSituacao.Text = New nfecsharp().NfeConsulta(txtNfeSit.Text)
+
+                btnConsultaSituacao.Enabled = True
+
+                lblStatus.Text = "Concluído."
+
+                Cursor = Cursors.Default
+
+            End If
+
+        End Sub

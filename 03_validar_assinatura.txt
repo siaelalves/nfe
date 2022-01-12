@@ -1,0 +1,27 @@
+ Private Sub btnValidar_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnValidar.Click
+
+            openFileDialog1.InitialDirectory = (Application.StartupPath & "\nfe\arquivos\assinado")
+
+            openFileDialog1.Filter = "NF-e (*.xml)|"
+
+            openFileDialog1.Title = "Localizar NF-e p/ Validar"
+
+            If (openFileDialog1.ShowDialog = DialogResult.OK) Then
+
+                lblStatus.Text = "Validando arquivo, aguarde..."
+
+                Dim nfecsharp As New nfecsharp
+
+                If nfecsharp.ValidarArquivoXML(openFileDialog1.FileName, cbbSchema.Text, True) Then
+
+                    lblStatus.Text = "Validação concluída, nenhum erro identificado."
+
+                Else
+
+                    lblStatus.Text = "Problemas identificados na validação"
+
+                End If
+
+            End If
+
+        End Sub

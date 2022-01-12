@@ -1,0 +1,33 @@
+Private Sub btnGerarLote_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnGerarLote.Click
+
+            Cursor = Cursors.AppStarting
+
+            btnGerarLote.Enabled = False
+
+            openFileDialog1.InitialDirectory = (Application.StartupPath & "\nfe\arquivos\assinado")
+
+            openFileDialog1.Filter = "NF-e (*.xml)|"
+
+            openFileDialog1.Title = "Localizar NF-e"
+
+            Dim str As String = "Falha na geração de lote."
+
+            If (openFileDialog1.ShowDialog = DialogResult.OK) Then
+
+                lblStatus.Text = "Gerando Lote de arquivo, aguarde..."
+
+                Dim random As New Random(5)
+
+                txtLoteID.Text = Convert.ToString(CInt((random.Next + DateTime.Now.Millisecond)))
+
+                str = New nfecsharp().GerarLote(openFileDialog1.FileName, Convert.ToInt32(txtLoteID.Text))
+
+            End If
+
+            btnGerarLote.Enabled = True
+
+            Cursor = Cursors.Default
+
+            lblStatus.Text = str
+
+        End Sub
